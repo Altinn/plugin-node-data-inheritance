@@ -1,0 +1,16 @@
+{
+  "name": "plugin-node-data-inheritance",
+  "version": "1.0.0-alpha",
+  "description": "Custom data inheritance plugin for Patternlab",
+  "main": "index.js",
+  "dependencies": {
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/Altinn/plugin-node-data-inheritance.git"
+  },
+  "scripts": { "postinstall": "node ./postinstall.js" },
+  "author": "David Emanuelsen",
+  "license": "MIT",
+  "homepage": "https://github.com/Altinn/plugin-node-data-inheritance#readme"
+}
