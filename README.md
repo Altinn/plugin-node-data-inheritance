@@ -10,3 +10,5 @@ To add the Custom Output Plugin to your project using [npm](http://npmjs.com/):
     npm install git+https://github.com/Altinn/plugin-node-data-inheritance.git
 
 Or add it directly to your project's `package.json` file and run `npm install`.
+
+Note: This plugin needs an event which is not (yet?) available in Patternlab node, TODO: description for where / how to add
