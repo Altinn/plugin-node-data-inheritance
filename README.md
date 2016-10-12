@@ -5,7 +5,7 @@ This means that data from included patterns is merged with the current pattern. 
 
 ## Installation
 
-To add the Custom Output Plugin to your project using [npm](http://npmjs.com/):
+To add the Data Inheritance Plugin to your project using [npm](http://npmjs.com/):
 
     npm install git+https://github.com/Altinn/plugin-node-data-inheritance.git
 
