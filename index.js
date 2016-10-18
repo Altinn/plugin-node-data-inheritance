@@ -76,7 +76,7 @@ function getPluginFrontendConfig () {
     'stylesheets': [],
     'javascripts': ['patternlab-components\/pattern-lab\/' + pluginName +
       '\/js\/' + pluginName + '.js'],
-    'onready': 'PluginDataInheritance.init()', 'callback': ''
+    'onready': '', 'callback': ''
   }
 }
 
