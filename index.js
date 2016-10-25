@@ -50,9 +50,10 @@ function arrayReplaceRecursive (arr) {
 function onPatternIterate (patternlab, pattern) {
   if (pattern.patternLineages) {
     for (var i = 0; i < pattern.patternLineages.length; i++) {
-      var thePart = pattern.patternLineages[i].lineagePath.split('\\').pop().split('.');
+      var thePart = pattern.patternLineages[i].lineagePath.split('\\').pop().split('.')[0];
       var currentPattern = getPatternByName(patternlab, thePart);
       if (currentPattern) {
+        onPatternIterate(patternlab, currentPattern);
         if (!pattern.jsonFileData) {
           pattern.jsonFileData = currentPattern.jsonFileData;
         } else {
