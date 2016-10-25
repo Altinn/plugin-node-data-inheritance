@@ -1,6 +1,6 @@
-var pluginName = 'plugin-node-data-inheritance'; 
+var pluginName = 'plugin-node-data-inheritance';
 var path = require('path');
-var fs = require('fs-extra'); 
+var fs = require('fs-extra');
 var glob = require('glob');
 
 function getPatternByName (patternlab, patternName) {
@@ -50,16 +50,13 @@ function arrayReplaceRecursive (arr) {
 function onPatternIterate (patternlab, pattern) {
   if (pattern.patternLineages) {
     for (var i = 0; i < pattern.patternLineages.length; i++) {
-      var lineagePathParts = pattern.patternLineages[i].lineagePath.split('\\');
-      var lastPartParts = lineagePathParts[lineagePathParts.length - 1].split('.');
-
-      var currentPattern = getPatternByName(patternlab, lastPartParts[0]);
+      var thePart = pattern.patternLineages[i].lineagePath.split('\\').pop().split('.');
+      var currentPattern = getPatternByName(patternlab, thePart);
       if (currentPattern) {
-        onPatternIterate(patternlab, currentPattern);
         if (!pattern.jsonFileData) {
           pattern.jsonFileData = currentPattern.jsonFileData;
         } else {
-          pattern.jsonFileData = arrayReplaceRecursive(pattern.jsonFileData, currentPattern.jsonFileData);
+          pattern.jsonFileData = arrayReplaceRecursive(currentPattern.jsonFileData, pattern.jsonFileData);
         }
       }
     }
@@ -99,14 +96,14 @@ function pluginInit (patternlab) {
     console.log(ex);
   }
 
-  if (!patternlab.plugins) { 
-    patternlab.plugins = [] 
+  if (!patternlab.plugins) {
+    patternlab.plugins = []
   }
 
   patternlab.plugins.push(pluginConfig);
   var pluginFiles = glob.sync(__dirname + '/dist/**/*');
   if (pluginFiles && pluginFiles.length > 0) {
-   
+
     for (var i = 0; i < pluginFiles.length; i++) {
       try {
         var fileStat = fs.statSync(pluginFiles[i]);
