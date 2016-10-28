@@ -24,36 +24,37 @@ function arrayReplaceRecursive (arr) {
   }
 
   if (Object.prototype.toString.call(arr) === '[object Array]') {
-    retObj = []
+    retObj = [];hehei
     for (p in arr) {
-      retObj.push(arr[p])
+      retObj.push(arr[p]);
     }
   } else {
-    retObj = {}
+    retObj = {};
     for (p in arr) {
-      retObj[p] = arr[p]
+      retObj[p] = arr[p];
     }
   }
 
   for (i = 1; i < argl; i++) {
     for (p in arguments[i]) {
       if (retObj[p] && typeof retObj[p] === 'object') {
-        retObj[p] = arrayReplaceRecursive(retObj[p], arguments[i][p])
+        retObj[p] = arrayReplaceRecursive(retObj[p], arguments[i][p]);
       } else {
-        retObj[p] = arguments[i][p]
+        retObj[p] = arguments[i][p];
       }
     }
   }
-  return retObj
+
+  return retObj;
 }
 
-function onPatternIterate (patternlab, pattern) {
+function generatePatternJson (patternlab, pattern) {
   if (pattern.patternLineages) {
     for (var i = 0; i < pattern.patternLineages.length; i++) {
       var thePart = pattern.patternLineages[i].lineagePath.split('\\').pop().split('.')[0];
       var currentPattern = getPatternByName(patternlab, thePart);
       if (currentPattern) {
-        onPatternIterate(patternlab, currentPattern);
+        generatePatternJson(patternlab, currentPattern);
         if (!pattern.jsonFileData) {
           pattern.jsonFileData = currentPattern.jsonFileData;
         } else {
@@ -65,7 +66,7 @@ function onPatternIterate (patternlab, pattern) {
 }
 
 function registerEvents (patternlab) {
-  patternlab.events.on('patternlab-pattern-before-data-merge', onPatternIterate);
+  patternlab.events.on('patternlab-pattern-before-data-merge', generatePatternJson);
 }
 
 function getPluginFrontendConfig () {
@@ -74,7 +75,8 @@ function getPluginFrontendConfig () {
     'stylesheets': [],
     'javascripts': ['patternlab-components\/pattern-lab\/' + pluginName +
       '\/js\/' + pluginName + '.js'],
-    'onready': '', 'callback': ''
+    'onready': '',
+    'callback': ''
   }
 }
 
@@ -104,7 +106,6 @@ function pluginInit (patternlab) {
   patternlab.plugins.push(pluginConfig);
   var pluginFiles = glob.sync(__dirname + '/dist/**/*');
   if (pluginFiles && pluginFiles.length > 0) {
-
     for (var i = 0; i < pluginFiles.length; i++) {
       try {
         var fileStat = fs.statSync(pluginFiles[i]);
