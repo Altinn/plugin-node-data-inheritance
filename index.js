@@ -24,7 +24,7 @@ function arrayReplaceRecursive (arr) {
   }
 
   if (Object.prototype.toString.call(arr) === '[object Array]') {
-    retObj = [];hehei
+    retObj = [];
     for (p in arr) {
       retObj.push(arr[p]);
     }
