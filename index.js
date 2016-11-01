@@ -51,7 +51,8 @@ function arrayReplaceRecursive (arr) {
 function generatePatternJson (patternlab, pattern) {
   if (pattern.patternLineages) {
     for (var i = 0; i < pattern.patternLineages.length; i++) {
-      var thePart = pattern.patternLineages[i].lineagePath.split('\\').pop().split('.')[0];
+      var regex = new RegExp(/\//, 'g');
+      var thePart = pattern.patternLineages[i].lineagePath.replace(regex, '\\').split('\\').pop().split('.')[0];
       var currentPattern = getPatternByName(patternlab, thePart);
       if (currentPattern) {
         generatePatternJson(patternlab, currentPattern);
