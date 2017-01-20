@@ -48,14 +48,22 @@ function arrayReplaceRecursive (arr) {
   return retObj;
 }
 
-function generatePatternJson (patternlab, pattern) {
+function generatePatternJson (patternlab, pattern, previousPatterns) {
   if (pattern.patternLineages) {
     for (var i = 0; i < pattern.patternLineages.length; i++) {
       var regex = new RegExp(/\//, 'g');
       var thePart = pattern.patternLineages[i].lineagePath.replace(regex, '\\').split('\\').pop().split('.')[0];
       var currentPattern = getPatternByName(patternlab, thePart);
+
       if (currentPattern) {
-        generatePatternJson(patternlab, currentPattern);
+        for (var x = 0; x < previousPatterns.length; x++) {
+          if (previousPatterns[x] == thePart) {
+            return;
+          }
+        }
+
+        previousPatterns.push(thePart);
+        generatePatternJson(patternlab, currentPattern, previousPatterns);
         if (!pattern.jsonFileData) {
           pattern.jsonFileData = currentPattern.jsonFileData;
         } else {
@@ -66,8 +74,13 @@ function generatePatternJson (patternlab, pattern) {
   }
 }
 
+function entryMethod(patternlab, pattern) {
+  var previousPatterns = [];
+  generatePatternJson(patternlab, pattern, previousPatterns);
+}
+
 function registerEvents (patternlab) {
-  patternlab.events.on('patternlab-pattern-before-data-merge', generatePatternJson);
+  patternlab.events.on('patternlab-pattern-before-data-merge', entryMethod);
 }
 
 function getPluginFrontendConfig () {
