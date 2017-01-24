@@ -48,7 +48,7 @@ function arrayReplaceRecursive (arr) {
   return retObj;
 }
 
-function generatePatternJson (patternlab, pattern, previousPatterns) {
+function generatePatternJson (patternlab, pattern, patternLimit) {
   if (pattern.patternLineages) {
     for (var i = 0; i < pattern.patternLineages.length; i++) {
       var regex = new RegExp(/\//, 'g');
@@ -56,14 +56,12 @@ function generatePatternJson (patternlab, pattern, previousPatterns) {
       var currentPattern = getPatternByName(patternlab, thePart);
 
       if (currentPattern) {
-        for (var x = 0; x < previousPatterns.length; x++) {
-          if (previousPatterns[x] == thePart) {
-            return;
-          }
+        if (patternLimit > 0) {
+          patternLimit--;
+        } else {
+          return;
         }
 
-        previousPatterns.push(thePart);
-        generatePatternJson(patternlab, currentPattern, previousPatterns);
         if (!pattern.jsonFileData) {
           pattern.jsonFileData = currentPattern.jsonFileData;
         } else {
@@ -75,8 +73,8 @@ function generatePatternJson (patternlab, pattern, previousPatterns) {
 }
 
 function entryMethod(patternlab, pattern) {
-  var previousPatterns = [];
-  generatePatternJson(patternlab, pattern, previousPatterns);
+  var patternLimit = 500;
+  generatePatternJson(patternlab, pattern, patternLimit);
 }
 
 function registerEvents (patternlab) {
