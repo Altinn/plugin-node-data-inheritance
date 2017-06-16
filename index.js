@@ -95,7 +95,6 @@ function generatePatternJson (patternlab, pattern, patternLimit) {
 
 function entryMethod(patternlab, pattern) {
   var patternLimit = 500;
-  console.log('Entry: ' + pattern.name);
   generatePatternJson(patternlab, pattern, patternLimit);
 }
 
