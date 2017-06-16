@@ -38,7 +38,11 @@ function arrayReplaceRecursive (arr) {
   for (i = 1; i < argl; i++) {
     for (p in arguments[i]) {
       if (retObj[p] && typeof retObj[p] === 'object') {
-        retObj[p] = arrayReplaceRecursive(retObj[p], arguments[i][p]);
+        if (arguments[i][p] === false) {
+          retObj[p] = false;
+        } else {
+          retObj[p] = arrayReplaceRecursive(retObj[p], arguments[i][p]);
+        }
       } else {
         retObj[p] = arguments[i][p];
       }
@@ -49,8 +53,19 @@ function arrayReplaceRecursive (arr) {
 }
 
 function generatePatternJson (patternlab, pattern, patternLimit) {
+  var existingData;
+  if (!fs.existsSync(path.resolve(patternlab.config.paths.public.root + 'inheritedData'))){
+    fs.mkdirSync(path.resolve(patternlab.config.paths.public.root + 'inheritedData'));
+  }
+
+  try {
+    existingData = JSON.parse(fs.readFileSync(path.resolve(patternlab.config.paths.public.root + 'inheritedData/' + pattern.name + '.json'),'utf8'));
+  } catch(e){
+  }
+
   if (pattern.patternLineages) {
     for (var i = 0; i < pattern.patternLineages.length; i++) {
+    
       var regex = new RegExp(/\//, 'g');
       var thePart = pattern.patternLineages[i].lineagePath.replace(regex, '\\').split('\\').pop().split('.')[0];
       var currentPattern = getPatternByName(patternlab, thePart);
@@ -70,10 +85,17 @@ function generatePatternJson (patternlab, pattern, patternLimit) {
       }
     }
   }
+
+  if (existingData) {
+    pattern.jsonFileData = arrayReplaceRecursive(existingData, pattern.jsonFileData);
+  }
+
+  fs.writeFileSync(path.resolve(patternlab.config.paths.public.root + 'inheritedData/' + pattern.name + '.json'), JSON.stringify(pattern.jsonFileData))
 }
 
 function entryMethod(patternlab, pattern) {
   var patternLimit = 500;
+  console.log('Entry: ' + pattern.name);
   generatePatternJson(patternlab, pattern, patternLimit);
 }
 
